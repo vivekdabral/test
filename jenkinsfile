@@ -11,7 +11,7 @@ pipeline{
         {
             steps{
             echo "inside test"
-            mvn package
+            sh "mvn package"
             }
         }
     }
