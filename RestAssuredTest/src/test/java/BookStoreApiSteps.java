@@ -232,12 +232,14 @@ public class BookStoreApiSteps {
     public void  getWrongURL()
     {
         String requestURL = "http://localhost:8082/getTopResultsApi" ;
+        System.out.println("Befoe the call");
         //String strPostBody =  "{ \"userName\": \"test-user-new5\",  \"password\": \"Test1234!\"}";
         given()
                 .auth()
                 .basic("admin", "password").when().queryParam("count","3").get(requestURL).then().statusCode(200);
 //                .basic("admin", "password").get(requestURL);
 
+        System.out.println("After the call");
         Response response = given()
                 .auth()
                 .basic("admin", "password").when().queryParam("count","3").get(requestURL);
