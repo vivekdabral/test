@@ -231,20 +231,23 @@ public class BookStoreApiSteps {
     @Step
     public void  getWrongURL()
     {
-        String requestURL = "http://localhost:8081/getTopResultsApi" ;
+        String requestURL = "http://localhost:8082/getTopResultsApi" ;
         //String strPostBody =  "{ \"userName\": \"test-user-new5\",  \"password\": \"Test1234!\"}";
         given()
                 .auth()
                 .basic("admin", "password").when().queryParam("count","3").get(requestURL).then().statusCode(200);
 //                .basic("admin", "password").get(requestURL);
 
+        Response response = given()
+                .auth()
+                .basic("admin", "password").when().queryParam("count","3").get(requestURL);
         //String jsonResponse = response.body().toString();
-//        ResponseBody body = response.getBody();
+        ResponseBody body = response.getBody();
 //        System.out.println("response.getStatusCode() is "+response.getStatusCode()) ;
 //
 //        // By using the ResponseBody.asString() method, we can convert the  body
 //        // into the string representation.
-//        System.out.println("Response Body is: " + body.asString());
+        System.out.println("Response Body is: " + body.asString());
 //        return body.asString();
     }
 
