@@ -1,0 +1,10 @@
+/opt/experiments/word-count-api/src/main/java/com/app/config/SwaggerConfig.java
+/opt/experiments/word-count-api/src/main/java/com/app/dao/counter/CounterDaoImpl.java
+/opt/experiments/word-count-api/src/main/java/com/app/config/SpringWebConfig.java
+/opt/experiments/word-count-api/src/main/java/com/app/service/counter/FileCounterServiceImpl.java
+/opt/experiments/word-count-api/src/main/java/com/app/Main.java
+/opt/experiments/word-count-api/src/main/java/com/app/service/counter/FileCounterService.java
+/opt/experiments/word-count-api/src/main/java/com/app/dao/counter/CounterDao.java
+/opt/experiments/word-count-api/src/main/java/com/app/config/SpringSecurityConfig.java
+/opt/experiments/word-count-api/src/main/java/com/app/controller/counter/CounterExportController.java
+/opt/experiments/word-count-api/src/main/java/com/app/entity/FileEntity.java
