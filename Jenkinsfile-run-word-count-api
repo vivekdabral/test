@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "M3"
+    }
+
+    stages {
+        stage('Build') {
+            
+            steps {
+                // Get some code from a GitHub repository
+                //git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                git 'https://github.com/vivekdabral/test.git'
+
+                sh "pwd"
+                sh "ls"
+                // Run Maven on a Unix agent.
+                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                sh "cd word-count-api; mvn clean install"
+
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+        }
+        stage('Build2') {
+            steps {
+                // Get some code from a GitHub repository
+                //git 'https://github.com/jglick/simple-maven-project-with-tests.git'
+                
+
+                // Run Maven on a Unix agent.
+                //sh "mvn -Dmaven.test.failure.ignore=true clean package"
+                
+                sh "cd word-count-api; docker run -d -p 8082:8081 --name=app docker-word"
+                sh "ls; cd RestAssuredTest; ls; mvn clean test"
+                
+                
+
+                // To run Maven on a Windows agent, use
+                // bat "mvn -Dmaven.test.failure.ignore=true clean package"
+            }
+
+            
+        }
+    }
+}

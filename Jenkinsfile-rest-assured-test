@@ -1,0 +1,23 @@
+pipeline {
+    agent {
+        docker {
+            image 'maven:3.6.3-jdk-11'
+            args  '--net="mynet"'
+        }
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+                git 'https://github.com/vivekdabral/test.git'
+                
+                sh "ls; cd RestAssuredTest; ls; mvn clean test"
+
+                
+            }
+
+           
+        }
+    }
+}
