@@ -1,0 +1,28 @@
+pipeline {
+    agent {
+        docker {
+            image 'blazemeter/taurus'
+            args  '--net="mynet"'
+        }
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                // Get some code from a GitHub repository
+		checkout scm
+                
+                sh "cd performance; cat performance.yaml; bzt performance.yaml -report"
+
+                
+            }
+	stage ('report'){
+
+        catchError( stageResult: 'FAILURE') {
+            perfReport filterRegex: '', sourceDataFiles: '**/stats.xml'
+        }
+      }
+           
+        }
+    }
+}
