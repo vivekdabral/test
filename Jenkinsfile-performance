@@ -12,7 +12,7 @@ pipeline {
                 // Get some code from a GitHub repository
 		checkout scm
                 
-                sh "cd performance; ls ; cat performance.yaml; bzt performance.yaml -report"
+                sh "ls; cd performance; ls ; cat performance.yaml; bzt performance.yaml -report"
 		}
                 
             }
