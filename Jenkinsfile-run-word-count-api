@@ -8,11 +8,10 @@ pipeline {
 
     stages {
         stage('Build') {
-            
+
+		checkout scm
             steps {
-                // Get some code from a GitHub repository
-                //git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                git 'https://github.com/vivekdabral/test.git'
+              
 
                 sh "pwd"
                 sh "ls"
@@ -23,9 +22,7 @@ pipeline {
         }
         stage('Run word-count-api') {
             steps {
-                // Get some code from a GitHub repository
-                //git 'https://github.com/jglick/simple-maven-project-with-tests.git'
-                
+                                         
 
                 // Runs the api using docker file
                 
