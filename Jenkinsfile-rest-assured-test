@@ -10,7 +10,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Get some code from a GitHub repository
-                git 'https://github.com/vivekdabral/test.git'
+		checkout scm
                 
                 sh "ls; cd RestAssuredTest; ls; mvn clean test"
 
