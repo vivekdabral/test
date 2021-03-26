@@ -17,9 +17,10 @@ pipeline {
                 
             }
 	stage ('report'){
-
-        catchError( stageResult: 'FAILURE') {
-            perfReport filterRegex: '', sourceDataFiles: '**/stats.xml'
+		steps {
+        		catchError( stageResult: 'FAILURE') {
+            			perfReport filterRegex: '', sourceDataFiles: '**/stats.xml'
+        	}
         }
       }
            
