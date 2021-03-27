@@ -231,8 +231,8 @@ public class BookStoreApiSteps {
     @Step
     public void  getWrongURL()
     {
-//        String requestURL = "http://localhost:8082/getTopResultsApi" ;
-        String requestURL = "http://app:8081/getTopResultsApi" ;
+        String requestURL = "http://localhost:8081/getTopResultsApi" ;
+//        String requestURL = "http://app:8081/getTopResultsApi" ;
         System.out.println("Befoe the call");
         //String strPostBody =  "{ \"userName\": \"test-user-new5\",  \"password\": \"Test1234!\"}";
         given()
