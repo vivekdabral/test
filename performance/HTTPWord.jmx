@@ -29,7 +29,7 @@
         <AuthManager guiclass="AuthPanel" testclass="AuthManager" testname="HTTP Authorization Manager" enabled="true">
           <collectionProp name="AuthManager.auth_list">
             <elementProp name="" elementType="Authorization">
-              <stringProp name="Authorization.url">http://localhost:8080</stringProp>
+              <stringProp name="Authorization.url">http://localhost:8081</stringProp>
               <stringProp name="Authorization.username">admin</stringProp>
               <stringProp name="Authorization.password">password</stringProp>
               <stringProp name="Authorization.domain"></stringProp>
@@ -53,7 +53,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">app</stringProp>
+          <stringProp name="HTTPSampler.domain">localhost</stringProp>
           <stringProp name="HTTPSampler.port">8081</stringProp>
           <stringProp name="HTTPSampler.protocol">http</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
