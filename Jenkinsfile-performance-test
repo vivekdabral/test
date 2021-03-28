@@ -5,7 +5,7 @@ pipeline {
         stage('Retreive Repo') {
             steps {
                 catchError( stageResult: 'FAILURE') {
-                        git 'https://github.com/vivekdabral/test.git'
+                        checkout scm
                }
             }
         }
