@@ -1,23 +1,40 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.6.3-jdk-11'
-            args  '--net="mynet"'
-        }
+    agent any
+
+    tools {
+        // Install the Maven version configured as "M3" and add it to the path.
+        maven "M3"
     }
 
     stages {
-        stage('Build') {
+        stage('Retreive Repo') {
             steps {
-                // Get some code from a GitHub repository
-		checkout scm
-                
-                sh "ls; cd RestAssuredTest; ls; mvn clean test"
-
-                
+                catchError( stageResult: 'FAILURE') {
+                      checkout scm
+               }
             }
-
-           
+        }
+        stage ('Run Tests'){
+            steps {
+                catchError( stageResult: 'FAILURE') {
+                        sh "ls; cd RestAssuredTest; ls; mvn clean verify"
+               }
+            }
+        }
+        
+        stage ('report'){
+            steps {
+                catchError( stageResult: 'FAILURE') {
+                        publishHTML(target: [
+                            reportName : 'Serenity',
+                             reportDir:   'RestAssuredTest/target/site/serenity', 
+                             reportFiles: 'index.html',
+                             keepAll:     true,
+                             alwaysLinkToLastBuild: true,
+                             allowMissing: false
+                        ])
+               }
+            }
         }
     }
 }
