@@ -17,7 +17,7 @@
 #   dump-csv: perf_result_csv.csv
 
 execution:
-- iterations: 1
+- iterations: 200
   concurrency: 1
   scenario: with_script
 
