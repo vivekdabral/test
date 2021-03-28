@@ -5,6 +5,7 @@ pipeline {
         stage('Retreive Repo') {
             steps {
                 catchError( stageResult: 'FAILURE') {
+                      sh "echo vivek"
                         checkout scm
                }
             }
