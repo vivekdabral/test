@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Retreive Repo') {
+            steps {
+                catchError( stageResult: 'FAILURE') {
+                        git 'https://github.com/vivekdabral/test.git'
+               }
+            }
+        }
+        stage ('Run Performance Test'){
+            steps {
+                catchError( stageResult: 'FAILURE') {
+                        sh "cd performance; bzt performance.yaml -report"
+               }
+            }
+        }
+        
+        stage ('report'){
+            steps {
+                catchError( stageResult: 'FAILURE') {
+                        perfReport filterRegex: '', sourceDataFiles: '**/stats.xml'
+               }
+            }
+        }
+    }
+}
