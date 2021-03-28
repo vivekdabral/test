@@ -1,10 +1,13 @@
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import net.thucydides.core.annotations.Step;
+import org.json.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.validation.constraints.AssertTrue;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -14,9 +17,12 @@ public class BookStoreApiSteps {
 
     String strHost = "demoqa.com";
     String strOrigin = "https://demoqa.com";
-    String userNameForBookStore;
-    String strBaseURL;
+    String strValidUserName = "admin";
+    String strValidPassword = "password";
     String strAccessToken ="Something";
+    String strBaseURL = "http://localhost:8081/";
+    String strValidEndpoint = "getTopResultsApi";
+    String strValidParam = "count";
 
 
 //    BookStoreApiSteps()
@@ -146,27 +152,27 @@ public class BookStoreApiSteps {
 
     }
 
-    @Step("Remove Book with ISBN {0} from user account of the user with UserID {1}")
-    public void removeBookFromUser(String strISBN, String strUserID, String strAccessToken)
-    {
-
-        strBaseURL = "https://demoqa.com/BookStore/v1/Book";
-        testCode();
-        String strPostBody = "{\"isbn\":\""+strISBN+"\",\"userId\":\""+strUserID+"\"}";
-        Response sDashoboardId = given().auth().oauth2(strAccessToken)
-                .header("Accept", "application/json, text/plain, */*")
-                .header("Accept-Encoding", "gzip, deflate, br")
-                .header("Authorization","Bearer "+strAccessToken)
-                .header("Connection", "keep-alive")
-                .header("Host", strHost)
-                .header("Origin", strOrigin)
-//                .header("Referer",strOrigin+"/dashboard/overview")
-                .header("Content-Type", "application/json;charset=UTF-8")
-                .body(strPostBody)
-                .delete(strBaseURL);
-        System.out.println("Dashboard Id "+sDashoboardId.getStatusCode());
-
-    }
+//    @Step("Remove Book with ISBN {0} from user account of the user with UserID {1}")
+//    public void removeBookFromUser(String strISBN, String strUserID, String strAccessToken)
+//    {
+//
+//        strBaseURL = "https://demoqa.com/BookStore/v1/Book";
+//        testCode();
+//        String strPostBody = "{\"isbn\":\""+strISBN+"\",\"userId\":\""+strUserID+"\"}";
+//        Response sDashoboardId = given().auth().oauth2(strAccessToken)
+//                .header("Accept", "application/json, text/plain, */*")
+//                .header("Accept-Encoding", "gzip, deflate, br")
+//                .header("Authorization","Bearer "+strAccessToken)
+//                .header("Connection", "keep-alive")
+//                .header("Host", strHost)
+//                .header("Origin", strOrigin)
+////                .header("Referer",strOrigin+"/dashboard/overview")
+//                .header("Content-Type", "application/json;charset=UTF-8")
+//                .body(strPostBody)
+//                .delete(strBaseURL);
+//        System.out.println("Dashboard Id "+sDashoboardId.getStatusCode());
+//
+//    }
 
 
     @Step("Remove all the books registered to the user with UserId {0}")
@@ -228,31 +234,78 @@ public class BookStoreApiSteps {
         return body.asString();
     }
 
-    @Step
-    public void  getWrongURL()
+
+    @Step ("Login with user name {0}, password {1} and count value is {2}")
+    public Response loginWithValidCredentialsAndCallApiWithCount(String userName, String usrPassword, String count)
     {
         String requestURL = "http://localhost:8081/getTopResultsApi" ;
-//        String requestURL = "http://app:8081/getTopResultsApi" ;
         System.out.println("Befoe the call");
-        //String strPostBody =  "{ \"userName\": \"test-user-new5\",  \"password\": \"Test1234!\"}";
-        given()
-                .auth()
-                .basic("admin", "password").when().queryParam("count","3").get(requestURL).then().statusCode(200);
-//                .basic("admin", "password").get(requestURL);
 
-        System.out.println("After the call");
         Response response = given()
                 .auth()
-                .basic("admin", "password").when().queryParam("count","3").get(requestURL);
-        //String jsonResponse = response.body().toString();
-        ResponseBody body = response.getBody();
-//        System.out.println("response.getStatusCode() is "+response.getStatusCode()) ;
-//
-//        // By using the ResponseBody.asString() method, we can convert the  body
-//        // into the string representation.
-        System.out.println("Response Body is: " + body.asString());
-//        return body.asString();
+                .basic(userName, usrPassword).when().queryParam("count",count).get(requestURL);
+
+        ResponseBody responseBody = response.getBody();
+
+        return response;
+
     }
+
+    @Step ("Check the status code if the endpoint name ({0}) is incorrect")
+    public Response checkStatusCodeWithInvalidEndpoint(String endpointName, int count)
+    {
+        String requestURL = "http://localhost:8081/"+endpointName ;
+
+        Response response = given()
+                .auth()
+                .basic(strValidUserName, strValidPassword).when().queryParam("count",count).get(requestURL);
+
+        ResponseBody responseBody = response.getBody();
+
+        return response;
+
+    }
+
+
+    @Step ("Call API when the query parameter name ({0}) is incorrect")
+    public Response callAPIWithInvalidQueryParameter(String strParamCount, int count)
+    {
+        String requestURL = "http://localhost:8081/"+strValidEndpoint ;
+
+        Response response = given()
+                .auth()
+                .basic(strValidUserName, strValidPassword).when().queryParam(strParamCount,count).get(requestURL);
+
+        return response;
+
+    }
+
+    @Step ("Check the status code if the endpoint name ({0}) is incorrect")
+    public Response callAPIWithInvalidEndpoint(String endpointName, int count)
+    {
+        String requestURL = "http://localhost:8081/"+endpointName ;
+
+        Response response = given()
+                .auth()
+                .basic(strValidUserName, strValidPassword).when().queryParam(strValidParam,count).get(requestURL);
+
+        return response;
+
+    }
+
+    @Step("Checking if returned Status code {1} is as expected {0}")
+    public void isStatusCodeCorrect(int expectedCode, int actualCode)
+    {
+        Assert.assertEquals(expectedCode,actualCode);
+    }
+
+    @Step("Check the number of words returned and compare them with count {1} passed in the query parameter")
+    public void isCorrectObjectsReturned(String jsonBody, int count)
+    {
+        JSONObject jsonObject = new JSONObject(jsonBody);
+        Assert.assertEquals(jsonObject.length(), count);
+    }
+
 
     private String getUniqueUserName()
     {
